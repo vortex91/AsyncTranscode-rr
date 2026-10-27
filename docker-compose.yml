@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  asynctranscode:
+    image: ghcr.io/vortex91/asynctranscode-rr:latest
+    container_name: asynctranscode-rr
+    restart: unless-stopped
+    volumes:
+      - ./config.json:/app/config.json
+      - ./config_node_sa.json:/app/config_node_sa.json
+      # Map your actual media/downloads directories
+      - /mnt/media:/mnt/media
+    environment:
+      - TZ=UTC
+      - PUID=1000
+      - PGID=1000
+    # Uncomment below if users want Hardware Acceleration (Intel QuickSync / VAAPI)
+    devices:
+      - /dev/dri:/dev/dri
+    
+    # Uncomment below if users want Nvidia GPU passthrough (requires Nvidia Container Toolkit)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu, compute, video]
